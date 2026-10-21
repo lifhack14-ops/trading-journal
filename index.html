@@ -207,6 +207,16 @@ body[data-theme="light"] .app-sidebar .tab{justify-content:flex-start;padding:12
  body[data-theme="light"] .app-content>.month-hero .chart-summary span{font-size:10px}
 }
 
+
+/* Mobile navigation touch reliability (iOS Safari and Android) */
+@media(max-width:600px){
+ #app .app-sidebar{position:relative;z-index:10000}
+ #app .app-sidebar .tabs{position:fixed!important;z-index:2147483000!important;pointer-events:auto!important;touch-action:manipulation;isolation:isolate}
+ #app .app-sidebar .tabs .tab{position:relative;z-index:1;pointer-events:auto!important;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+ #app .app-sidebar .tabs .tab span{pointer-events:none}
+ body{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+}
+
 </style></head><body><main class="shell">
 <section id="setup" class="panel auth hidden"><h1>Підключення Trading Journal</h1><p class="muted">Встав URL і публічний ключ Supabase. Не використовуй service_role або secret key.</p><label>Supabase Project URL</label><input id="sbUrl" placeholder="https://xxxx.supabase.co"><br><br><label>Publishable / anon key</label><input id="sbKey" placeholder="sb_publishable_… або eyJ…"><div class="actions"><button id="saveConfig">Підключити</button></div></section>
 <section id="auth" class="panel auth"><div class="brand"><div class="logo"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 25V7M12 25V15M19 25V11M26 25V4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".75"/><path d="M4 20L11 15L17 18L27 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7H27V13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h1>Trading Journal</h1><div class="muted">Твій приватний щоденник трейдера</div></div></div><p class="muted">Створи акаунт або увійди. На інших пристроях використовуй той самий email.</p><label>Email</label><input id="email" type="email" autocomplete="email"><br><br><label>Пароль</label><input id="password" type="password" autocomplete="current-password"><div class="actions"><button id="signIn">Увійти</button><button class="secondary" id="signUp">Створити акаунт</button><button class="secondary" id="changeConfig">Налаштування</button></div><p id="authMsg" class="muted"></p></section>
@@ -244,6 +254,13 @@ document.addEventListener('click',function(event){
  const button=event.target.closest('[data-tab]');
  if(button){event.preventDefault();if(typeof tab==='function')tab(button.dataset.tab)}
 });
+/* iOS sometimes delays or drops synthesized clicks on fixed bottom navigation. */
+document.addEventListener('touchend',function(event){
+ const button=event.target.closest('#app .app-sidebar .tabs [data-tab]');
+ if(!button)return;
+ event.preventDefault();
+ if(typeof tab==='function')tab(button.dataset.tab);
+},{passive:false});
 function show(id){['setup','auth','app'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}
 function config(){let url=localStorage.getItem('tj_url')||DEFAULT_SUPABASE_URL;let key=localStorage.getItem('tj_key');if(!key||key==='sb_publishable_Bk6mnQQQFh1G7pjwxxsDBg_OS9zj3rM'){key=DEFAULT_SUPABASE_KEY;localStorage.setItem('tj_key',key)}if(url){try{url=new URL(url.trim()).origin}catch(e){url=url.trim().replace(/\/+$/,'')}}return {url,key}}
 function connect(){const c=config();if(!c.url||!c.key){show('setup');return}try{sb=window.supabase.createClient(c.url,c.key);show('auth');sb.auth.getSession().then(({data})=>data.session?boot(data.session.user):show('auth'));sb.auth.onAuthStateChange((_e,s)=>{if(s&&!user)boot(s.user);else if(!s){user=null;show('auth')}})}catch(e){show('setup')}}
