@@ -54,7 +54,7 @@ body.force-mobile .shell{max-width:430px}body.force-desktop .shell{max-width:148
 <script>
 const $=id=>document.getElementById(id);let sb,user,trades=[],editing=null;
 const DEFAULT_SUPABASE_URL='https://pmcednouylarucuyarzu.supabase.co';
-const DEFAULT_SUPABASE_KEY='sb_publishable_Bk6mnQQQFh1G7pjwxxsDBg_OS9zj3rM';
+const DEFAULT_SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtY2Vkbm91eWxhcnVjdXlhcnp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1NzIxMTUsImV4cCI6MjEwODE0ODExNX0.GVHANSOSLxvCp0dLRhP-m4HnzHfHYXH3tCCTWfhXaoo';
 function show(id){['setup','auth','app'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}
 function config(){let url=localStorage.getItem('tj_url')||DEFAULT_SUPABASE_URL;let key=localStorage.getItem('tj_key')||DEFAULT_SUPABASE_KEY;if(url){try{url=new URL(url.trim()).origin}catch(e){url=url.trim().replace(/\/+$/,'')}}return {url,key}}
 function connect(){const c=config();if(!c.url||!c.key){show('setup');return}try{sb=window.supabase.createClient(c.url,c.key);show('auth');sb.auth.getSession().then(({data})=>data.session?boot(data.session.user):show('auth'));sb.auth.onAuthStateChange((_e,s)=>{if(s&&!user)boot(s.user);else if(!s){user=null;show('auth')}})}catch(e){show('setup')}}
