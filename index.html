@@ -144,6 +144,44 @@ body[data-theme="premium"] .empty{background:#101b30;border-color:#304568;color:
 @media(max-width:850px) and (min-width:601px){.app-layout{grid-template-columns:185px minmax(0,1fr);gap:14px}.app-sidebar .tab{padding:10px 9px;font-size:12px}.app-sidebar .tab-emoji{font-size:16px}}
 @media(max-width:600px){.app-layout{display:block}.app-sidebar{position:static}.app-sidebar .tabs{position:fixed;z-index:1000;bottom:calc(8px + env(safe-area-inset-bottom));left:9px;right:9px;margin:0 auto;max-width:430px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:6px;border-radius:19px;background:rgba(8,17,26,.95);box-shadow:0 10px 35px #0007;backdrop-filter:blur(18px)}.app-sidebar .tabs .tab{width:auto;min-width:0;min-height:54px;padding:7px 2px;font-size:10px;white-space:normal;justify-content:center;text-align:center;border-radius:12px}.app-content{min-width:0}}
 
+
+/* Final mobile navigation sizing: keep the menu as a compact bottom bar */
+@media (max-width: 600px) {
+  #app .app-layout > .app-sidebar > .tabs {
+    position: fixed !important;
+    top: auto !important;
+    bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+    left: 9px !important;
+    right: 9px !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: 84px !important;
+    max-width: 430px !important;
+    margin: 0 auto !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    overflow: visible !important;
+    padding: 6px !important;
+    z-index: 1000 !important;
+  }
+  #app .app-layout > .app-sidebar > .tabs > .tab {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 54px !important;
+    height: auto !important;
+    padding: 6px 2px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    font-size: 10px !important;
+    line-height: 1.15 !important;
+    white-space: normal !important;
+  }
+}
+
 </style></head><body><main class="shell">
 <section id="setup" class="panel auth hidden"><h1>Підключення Trading Journal</h1><p class="muted">Встав URL і публічний ключ Supabase. Не використовуй service_role або secret key.</p><label>Supabase Project URL</label><input id="sbUrl" placeholder="https://xxxx.supabase.co"><br><br><label>Publishable / anon key</label><input id="sbKey" placeholder="sb_publishable_… або eyJ…"><div class="actions"><button id="saveConfig">Підключити</button></div></section>
 <section id="auth" class="panel auth"><div class="brand"><div class="logo"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 25V7M12 25V15M19 25V11M26 25V4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".75"/><path d="M4 20L11 15L17 18L27 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7H27V13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h1>Trading Journal</h1><div class="muted">Твій приватний щоденник трейдера</div></div></div><p class="muted">Створи акаунт або увійди. На інших пристроях використовуй той самий email.</p><label>Email</label><input id="email" type="email" autocomplete="email"><br><br><label>Пароль</label><input id="password" type="password" autocomplete="current-password"><div class="actions"><button id="signIn">Увійти</button><button class="secondary" id="signUp">Створити акаунт</button><button class="secondary" id="changeConfig">Налаштування</button></div><p id="authMsg" class="muted"></p></section>
