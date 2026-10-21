@@ -163,6 +163,13 @@ body[data-theme="premium"] .empty{background:#101b30;border-color:#304568;color:
   .desktop-content{display:contents}
 }
 
+
+/* Robust desktop navigation and appearance controls */
+@media(min-width:851px){
+  .desktop-sidebar{position:sticky;z-index:20;pointer-events:auto}
+  .desktop-sidebar .tabs,.desktop-sidebar .tab{pointer-events:auto;position:relative}
+  .desktop-sidebar .tab{cursor:pointer}
+}
 </style></head><body><main class="shell">
 <section id="setup" class="panel auth hidden"><h1>Підключення Trading Journal</h1><p class="muted">Встав URL і публічний ключ Supabase. Не використовуй service_role або secret key.</p><label>Supabase Project URL</label><input id="sbUrl" placeholder="https://xxxx.supabase.co"><br><br><label>Publishable / anon key</label><input id="sbKey" placeholder="sb_publishable_… або eyJ…"><div class="actions"><button id="saveConfig">Підключити</button></div></section>
 <section id="auth" class="panel auth"><div class="brand"><div class="logo"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 25V7M12 25V15M19 25V11M26 25V4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".75"/><path d="M4 20L11 15L17 18L27 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7H27V13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h1>Trading Journal</h1><div class="muted">Твій приватний щоденник трейдера</div></div></div><p class="muted">Створи акаунт або увійди. На інших пристроях використовуй той самий email.</p><label>Email</label><input id="email" type="email" autocomplete="email"><br><br><label>Пароль</label><input id="password" type="password" autocomplete="current-password"><div class="actions"><button id="signIn">Увійти</button><button class="secondary" id="signUp">Створити акаунт</button><button class="secondary" id="changeConfig">Налаштування</button></div><p id="authMsg" class="muted"></p></section>
@@ -255,5 +262,11 @@ $('makePrompt').onclick=()=>{const t=trades.find(x=>x.id===$('reviewTrade').valu
 $('copyPrompt').onclick=async()=>{try{await navigator.clipboard.writeText($('promptOutput').value);$('copyPrompt').textContent='Скопійовано!';setTimeout(()=>$('copyPrompt').textContent='Копіювати',1500)}catch(e){$('promptOutput').select();document.execCommand('copy')}};
 try{initTradingCalendar()}catch(e){console.error('Calendar initialization failed:',e)}
 try{setupDesktopSidebar()}catch(e){console.error('Desktop sidebar initialization failed:',e)}
+// Rebind controls after the desktop layout has been assembled.
+document.querySelectorAll('.desktop-sidebar [data-tab], .tabs [data-tab]').forEach(b=>{b.onclick=()=>tab(b.dataset.tab)});
+const themeButton=$('themeToggle'),styleButton=$('styleToggle'),viewButton=$('viewToggle');
+if(themeButton)themeButton.onclick=()=>{const themes=['dark','pro','premium','light'];const current=document.body.dataset.theme||'dark';localStorage.setItem('tj_theme',themes[(themes.indexOf(current)+1)%themes.length]);initAppearance()};
+if(styleButton)styleButton.onclick=()=>{localStorage.setItem('tj_style',document.body.dataset.style==='neon'?'minimal':'neon');initAppearance()};
+if(viewButton)viewButton.onclick=()=>{const v=localStorage.getItem('tj_view')||'auto';localStorage.setItem('tj_view',v==='auto'?'mobile':v==='mobile'?'desktop':'auto');initAppearance()};
 connect();
 </script></body></html>
