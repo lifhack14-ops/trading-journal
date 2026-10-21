@@ -133,43 +133,6 @@ body[data-theme="premium"] .empty{background:#101b30;border-color:#304568;color:
 @media(max-width:600px){body[data-theme="pro"] .panel,body[data-theme="premium"] .panel{border-radius:15px}body[data-theme="premium"] .shell,body[data-theme="pro"] .shell{padding-top:12px}}
 
 
-/* Desktop sidebar navigation; mobile keeps the bottom bar */
-@media(min-width:851px){
-  #app>.desktop-layout{display:grid;grid-template-columns:218px minmax(0,1fr);align-items:start;gap:22px}
-  #app>.top{margin-bottom:22px}
-  .desktop-sidebar{position:sticky;top:18px;align-self:start;min-width:0;padding:14px 11px;border:1px solid #1b3641;border-radius:18px;background:rgba(7,15,23,.86);box-shadow:0 14px 38px #0002;backdrop-filter:blur(16px)}
-  .sidebar-caption{padding:5px 11px 12px;color:#688591;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
-  .desktop-sidebar .tabs{display:flex;flex-direction:column;gap:5px;overflow:visible;padding:0;margin:0;border:0;background:transparent}
-  .desktop-sidebar .tab{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:11px 12px;text-align:left;white-space:normal;border-radius:11px;color:#91aab5;justify-content:flex-start}
-  .desktop-sidebar .tab-emoji{width:24px;flex:0 0 24px;font-size:18px;text-align:center}
-  .desktop-sidebar .tab.active{background:linear-gradient(110deg,rgba(0,229,192,.17),rgba(0,229,192,.045));border-color:rgba(0,229,192,.3);color:#6fffe0;box-shadow:inset 3px 0 #00e5c0}
-  .desktop-sidebar .tab:hover{background:#10252d;color:#e7fffa}
-  .desktop-content{min-width:0}
-  .desktop-content>.panel:first-child{margin-top:0}
-  body[data-theme="pro"] .desktop-sidebar{background:#11141b;border-color:#2a303b;border-radius:14px;box-shadow:0 8px 24px #0002}
-  body[data-theme="pro"] .desktop-sidebar .tab.active{background:#253b31;border-color:#365f4b;color:#65e9ad;box-shadow:inset 3px 0 #42d99b}
-  body[data-theme="pro"] .desktop-sidebar .tab:hover{background:#20242d;color:#fff}
-  body[data-theme="premium"] .desktop-sidebar{background:#0c1629dd;border-color:#2a3e62;border-radius:20px;box-shadow:0 18px 40px #03081740;backdrop-filter:blur(18px)}
-  body[data-theme="premium"] .desktop-sidebar .tab.active{background:linear-gradient(120deg,#8ba8ff26,#9d8bff18);border-color:#758bd3;color:#d5e0ff;box-shadow:inset 3px 0 #9eb4ff}
-  body[data-theme="premium"] .desktop-sidebar .tab:hover{background:#1b2944;color:#fff}
-  body[data-theme="light"] .desktop-sidebar{background:#f8fcfd;border-color:#d7e5e8;box-shadow:0 12px 30px #1b4a510a}
-  body[data-theme="light"] .desktop-sidebar .tab.active{background:#e1f7f1;color:#007c6b;border-color:#a5e8da;box-shadow:inset 3px 0 #008e78}
-  body[data-theme="light"] .desktop-sidebar .tab:hover{background:#eef8f7;color:#24515a}
-}
-@media(max-width:850px){
-  #app>.desktop-layout{display:block}
-  .desktop-sidebar{display:contents}
-  .sidebar-caption{display:none}
-  .desktop-content{display:contents}
-}
-
-
-/* Robust desktop navigation and appearance controls */
-@media(min-width:851px){
-  .desktop-sidebar{position:sticky;z-index:20;pointer-events:auto}
-  .desktop-sidebar .tabs,.desktop-sidebar .tab{pointer-events:auto;position:relative}
-  .desktop-sidebar .tab{cursor:pointer}
-}
 </style></head><body><main class="shell">
 <section id="setup" class="panel auth hidden"><h1>Підключення Trading Journal</h1><p class="muted">Встав URL і публічний ключ Supabase. Не використовуй service_role або secret key.</p><label>Supabase Project URL</label><input id="sbUrl" placeholder="https://xxxx.supabase.co"><br><br><label>Publishable / anon key</label><input id="sbKey" placeholder="sb_publishable_… або eyJ…"><div class="actions"><button id="saveConfig">Підключити</button></div></section>
 <section id="auth" class="panel auth"><div class="brand"><div class="logo"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 25V7M12 25V15M19 25V11M26 25V4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".75"/><path d="M4 20L11 15L17 18L27 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7H27V13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h1>Trading Journal</h1><div class="muted">Твій приватний щоденник трейдера</div></div></div><p class="muted">Створи акаунт або увійди. На інших пристроях використовуй той самий email.</p><label>Email</label><input id="email" type="email" autocomplete="email"><br><br><label>Пароль</label><input id="password" type="password" autocomplete="current-password"><div class="actions"><button id="signIn">Увійти</button><button class="secondary" id="signUp">Створити акаунт</button><button class="secondary" id="changeConfig">Налаштування</button></div><p id="authMsg" class="muted"></p></section>
@@ -250,7 +213,6 @@ $('tradeForm').onsubmit=async e=>{e.preventDefault();msg('Збереження�
 const res=editing?await sb.from('trades').update(payload).eq('id',editing):await sb.from('trades').insert(payload);if(res.error)throw res.error;resetForm();await loadTrades();tab('journal');msg('Синхронізовано')}catch(err){$('tradeMsg').textContent=err.message;msg('Помилка')}finally{$('saveTrade').disabled=false}};
 async function loadPlan(){const {data,error}=await sb.from('trading_plan').select('*').eq('user_id',user.id).maybeSingle();if(error){$('planMsg').textContent=error.message;return}if(data){$('strategy').value=data.strategy||'';$('entryRules').value=data.entry_rules||'';$('riskLimit').value=data.risk_limit_usd||0;$('dailyLimit').value=data.daily_loss_limit_usd||0;$('tradeLimit').value=data.max_trades_per_day||0;$('checklist').value=data.checklist||''}}
 $('planForm').onsubmit=async e=>{e.preventDefault();const p={user_id:user.id,strategy:val('strategy'),entry_rules:val('entryRules'),risk_limit_usd:num('riskLimit')||0,daily_loss_limit_usd:num('dailyLimit')||0,max_trades_per_day:num('tradeLimit')||0,checklist:val('checklist'),updated_at:new Date().toISOString()};const {error}=await sb.from('trading_plan').upsert(p);$('planMsg').textContent=error?error.message:'План збережено й синхронізовано.'};
-function setupDesktopSidebar(){const app=$('app'),header=app.querySelector('.top'),nav=app.querySelector('.tabs');if(!app||!header||!nav||app.querySelector('.desktop-layout'))return;const layout=document.createElement('div');layout.className='desktop-layout';const sidebar=document.createElement('aside');sidebar.className='desktop-sidebar';sidebar.setAttribute('aria-label','Бічна навігація');const caption=document.createElement('div');caption.className='sidebar-caption';caption.textContent='Робочий простір';sidebar.appendChild(caption);const content=document.createElement('div');content.className='desktop-content';const nodes=Array.from(app.children).filter(el=>el!==header);nodes.forEach(el=>{if(el===nav)sidebar.appendChild(nav);else content.appendChild(el)});layout.append(sidebar,content);header.after(layout)}
 function initAppearance(){const theme=localStorage.getItem('tj_theme')||'dark',style=localStorage.getItem('tj_style')||'neon',view=localStorage.getItem('tj_view')||'auto';document.body.dataset.theme=theme;document.body.dataset.style=style;document.body.classList.toggle('force-mobile',view==='mobile');document.body.classList.toggle('force-desktop',view==='desktop');const themeLabels={dark:'Оригінальна тема',pro:'Dark Pro Trader',premium:'Premium Fintech',light:'Світла тема'};$('themeToggle').textContent=theme==='dark'?'🎨':theme==='pro'?'📊':theme==='premium'?'💎':'☀️';$('styleToggle').textContent=style==='neon'?'✨':'🧊';$('viewToggle').textContent=view==='auto'?'📱':view==='mobile'?'📲':'🖥️';$('themeToggle').title='Тема: '+(themeLabels[theme]||themeLabels.dark)+' — натисни, щоб змінити';$('styleToggle').title=style==='neon'?'Увімкнути мінімальний стиль':'Увімкнути неоновий стиль';$('viewToggle').title=view==='auto'?'Автоматичний вигляд':view==='mobile'?'Перемкнути на комп’ютерний вигляд':'Перемкнути на мобільний вигляд'}
 $('themeToggle').onclick=()=>{const themes=['dark','pro','premium','light'];const current=document.body.dataset.theme||'dark';localStorage.setItem('tj_theme',themes[(themes.indexOf(current)+1)%themes.length]);initAppearance()};
 $('styleToggle').onclick=()=>{localStorage.setItem('tj_style',document.body.dataset.style==='neon'?'minimal':'neon');initAppearance()};
@@ -261,9 +223,8 @@ document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.t
 $('makePrompt').onclick=()=>{const t=trades.find(x=>x.id===$('reviewTrade').value);if(!t){$('promptOutput').value='Спочатку додай угоду.';return}$('promptOutput').value='Допоможи розібрати мою угоду як торговий наставник. Не обіцяй прибуток і не вигадуй дані.\nІнструмент: '+t.instrument+'\nНапрямок: '+t.direction+'\nДата: '+t.entry_at+'\nТаймфрейм: '+t.timeframe+'\nEntry: '+t.entry_price+'; SL: '+t.sl+'; TP1: '+t.tp1+'; TP2: '+t.tp2+'\nРезультат: '+resultLabel(t)+'\nНотатки: '+([t.setup_notes,t.emotion_notes,t.lesson_notes].filter(Boolean).join('\n')||'—')+'\nМій запит: '+$('reviewFocus').value+'\nПроаналізуй якість сетапу, ризик-менеджмент, дисципліну, можливі помилки та 3 конкретні уроки. Це освітній розбір, не фінансова рекомендація.'};
 $('copyPrompt').onclick=async()=>{try{await navigator.clipboard.writeText($('promptOutput').value);$('copyPrompt').textContent='Скопійовано!';setTimeout(()=>$('copyPrompt').textContent='Копіювати',1500)}catch(e){$('promptOutput').select();document.execCommand('copy')}};
 try{initTradingCalendar()}catch(e){console.error('Calendar initialization failed:',e)}
-try{setupDesktopSidebar()}catch(e){console.error('Desktop sidebar initialization failed:',e)}
 // Rebind controls after the desktop layout has been assembled.
-document.querySelectorAll('.desktop-sidebar [data-tab], .tabs [data-tab]').forEach(b=>{b.onclick=()=>tab(b.dataset.tab)});
+
 const themeButton=$('themeToggle'),styleButton=$('styleToggle'),viewButton=$('viewToggle');
 if(themeButton)themeButton.onclick=()=>{const themes=['dark','pro','premium','light'];const current=document.body.dataset.theme||'dark';localStorage.setItem('tj_theme',themes[(themes.indexOf(current)+1)%themes.length]);initAppearance()};
 if(styleButton)styleButton.onclick=()=>{localStorage.setItem('tj_style',document.body.dataset.style==='neon'?'minimal':'neon');initAppearance()};
