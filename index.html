@@ -21,7 +21,7 @@
 <script>
 const $=id=>document.getElementById(id);let sb,user,trades=[],editing=null;
 function show(id){['setup','auth','app'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}
-function config(){return {url:localStorage.getItem('tj_url'),key:localStorage.getItem('tj_key')}}
+function config(){let url=localStorage.getItem('tj_url');if(url){try{url=new URL(url.trim()).origin;localStorage.setItem('tj_url',url)}catch(e){url=url.trim().replace(/\\/+$/,'')}}return {url,key:localStorage.getItem('tj_key')}}
 function connect(){const c=config();if(!c.url||!c.key){show('setup');return}try{sb=window.supabase.createClient(c.url,c.key);show('auth');sb.auth.getSession().then(({data})=>data.session?boot(data.session.user):show('auth'));sb.auth.onAuthStateChange((_e,s)=>{if(s&&!user)boot(s.user);else if(!s){user=null;show('auth')}})}catch(e){show('setup')}}
 $('saveConfig').onclick=()=>{localStorage.setItem('tj_url',$('sbUrl').value.trim());localStorage.setItem('tj_key',$('sbKey').value.trim());connect()};
 $('changeConfig').onclick=()=>{const c=config();$('sbUrl').value=c.url||'';$('sbKey').value=c.key||'';show('setup')};
