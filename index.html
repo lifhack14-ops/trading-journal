@@ -248,12 +248,12 @@ function initAppearance(){const theme=localStorage.getItem('tj_theme')||'dark',s
 $('themeToggle').onclick=()=>{const themes=['dark','pro','premium','light'];const current=document.body.dataset.theme||'dark';localStorage.setItem('tj_theme',themes[(themes.indexOf(current)+1)%themes.length]);initAppearance()};
 $('styleToggle').onclick=()=>{localStorage.setItem('tj_style',document.body.dataset.style==='neon'?'minimal':'neon');initAppearance()};
 $('viewToggle').onclick=()=>{const v=localStorage.getItem('tj_view')||'auto';localStorage.setItem('tj_view',v==='auto'?'mobile':v==='mobile'?'desktop':'auto');initAppearance()};
-setupDesktopSidebar();
 initAppearance();
-initTradingCalendar();
 function tab(name){const active=name==='plan'?'stats':name;document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===active));['journal','new','stats','plan','review'].forEach(n=>$('page-'+n).classList.toggle('hidden',n!==name));if(name==='new'&&!editing)resetForm();if(name==='stats')renderDetailedStats()}
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));$('newTradeBtn').onclick=()=>{resetForm();tab('new')};$('cancelTrade').onclick=()=>{resetForm();tab('journal')};$('statsPeriod').onchange=renderDetailedStats;$('openPlan').onclick=()=>tab('plan');$('openJournal').onclick=()=>tab('journal');$('backToStats').onclick=()=>tab('stats');
 $('makePrompt').onclick=()=>{const t=trades.find(x=>x.id===$('reviewTrade').value);if(!t){$('promptOutput').value='Спочатку додай угоду.';return}$('promptOutput').value='Допоможи розібрати мою угоду як торговий наставник. Не обіцяй прибуток і не вигадуй дані.\nІнструмент: '+t.instrument+'\nНапрямок: '+t.direction+'\nДата: '+t.entry_at+'\nТаймфрейм: '+t.timeframe+'\nEntry: '+t.entry_price+'; SL: '+t.sl+'; TP1: '+t.tp1+'; TP2: '+t.tp2+'\nРезультат: '+resultLabel(t)+'\nНотатки: '+([t.setup_notes,t.emotion_notes,t.lesson_notes].filter(Boolean).join('\n')||'—')+'\nМій запит: '+$('reviewFocus').value+'\nПроаналізуй якість сетапу, ризик-менеджмент, дисципліну, можливі помилки та 3 конкретні уроки. Це освітній розбір, не фінансова рекомендація.'};
 $('copyPrompt').onclick=async()=>{try{await navigator.clipboard.writeText($('promptOutput').value);$('copyPrompt').textContent='Скопійовано!';setTimeout(()=>$('copyPrompt').textContent='Копіювати',1500)}catch(e){$('promptOutput').select();document.execCommand('copy')}};
+try{initTradingCalendar()}catch(e){console.error('Calendar initialization failed:',e)}
+try{setupDesktopSidebar()}catch(e){console.error('Desktop sidebar initialization failed:',e)}
 connect();
 </script></body></html>
