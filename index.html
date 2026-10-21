@@ -84,7 +84,7 @@ function renderDetailedStats(){const period=$('statsPeriod')?.value||'week',now=
 function localDateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
 let calendarMonth=new Date();calendarMonth.setDate(1);let selectedCalendarDate=localDateKey(new Date());
 function calendarTradeDate(t){const d=new Date(t.exit_at||t.entry_at);return Number.isNaN(d.getTime())?'':localDateKey(d)}
-function calendarTradePercent(t){if(t.status==='open')return 0;const result=resultKey(t);return result==='tp2'?2:result==='tp1'?1:result==='sl'?-2:0}
+function calendarTradePercent(t){if(t.status==='open')return 0;const result=resultKey(t);return result==='tp2'?2:result==='tp1'?1:result==='sl'?-1:0}
 function calendarTradesForDate(key){return trades.filter(t=>calendarTradeDate(t)===key).sort((a,b)=>new Date(a.entry_at)-new Date(b.entry_at))}
 function calendarDayResult(key){return calendarTradesForDate(key).filter(t=>t.status!=='open').reduce((sum,t)=>sum+calendarTradePercent(t),0)}
 function calendarDayPercent(key){return calendarDayResult(key)}
