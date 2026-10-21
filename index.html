@@ -143,6 +143,70 @@ body[data-theme="premium"] .empty{background:#101b30;border-color:#304568;color:
 .app-content>.month-hero{margin-top:0}
 @media(max-width:850px) and (min-width:601px){.app-layout{grid-template-columns:185px minmax(0,1fr);gap:14px}.app-sidebar .tab{padding:10px 9px;font-size:12px}.app-sidebar .tab-emoji{font-size:16px}}
 @media(max-width:600px){.app-layout{display:block}.app-sidebar{position:static}.app-sidebar .tabs{position:fixed;z-index:1000;bottom:calc(8px + env(safe-area-inset-bottom));left:9px;right:9px;margin:0 auto;max-width:430px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:6px;border-radius:19px;background:rgba(8,17,26,.95);box-shadow:0 10px 35px #0007;backdrop-filter:blur(18px)}.app-sidebar .tabs .tab{width:auto;min-width:0;min-height:54px;padding:7px 2px;font-size:10px;white-space:normal;justify-content:center;text-align:center;border-radius:12px}.app-content{min-width:0}}
+
+/* Distinct visual layouts for each dashboard theme — functionality and page structure stay intact */
+body[data-theme="pro"] .app-content{display:flex;flex-direction:column;gap:14px}
+body[data-theme="pro"] .app-content>.month-hero{display:grid;grid-template-columns:minmax(220px,.85fr) minmax(0,1.15fr);grid-template-areas:"heading summary" "heading chart" "foot foot";gap:16px 24px;padding:24px;border-radius:12px;border-left:4px solid #42d99b}
+body[data-theme="pro"] .app-content>.month-hero .month-heading{grid-area:heading;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:24px}
+body[data-theme="pro"] .app-content>.month-hero .month-balance{width:100%;text-align:left}
+body[data-theme="pro"] .app-content>.month-hero .month-balance strong{font-size:clamp(32px,4vw,48px);font-variant-numeric:tabular-nums}
+body[data-theme="pro"] .app-content>.month-hero .chart-summary{grid-area:summary;grid-template-columns:repeat(3,minmax(0,1fr));margin:0}
+body[data-theme="pro"] .app-content>.month-hero .chart-summary>div{border:0;border-left:1px solid #303744;border-radius:0;background:transparent;padding:4px 12px}
+body[data-theme="pro"] .app-content>.month-hero .chart-summary>div:first-child{border-left:0}
+body[data-theme="pro"] .app-content>.month-hero .month-chart{grid-area:chart;min-height:105px}
+body[data-theme="pro"] .app-content>.month-hero>.chart-footnote{grid-area:foot}
+body[data-theme="pro"] .app-content>.stats{gap:8px}
+body[data-theme="pro"] .app-content>.stats .stat{border-radius:8px;min-height:96px;padding:14px 16px}
+body[data-theme="pro"] .app-content>.panel:not(.month-hero){border-radius:10px}
+body[data-theme="pro"] .app-sidebar{border-right:1px solid #252b36}
+body[data-theme="pro"] .app-sidebar .tabs{background:transparent;border:0}
+body[data-theme="pro"] .app-sidebar .tab{justify-content:flex-start;padding:12px 14px;border-radius:8px}
+body[data-theme="premium"] .app-content{gap:20px}
+body[data-theme="premium"] .app-content>.month-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-areas:"heading chart" "summary summary" "foot foot";gap:22px;padding:28px}
+body[data-theme="premium"] .app-content>.month-hero .month-heading{grid-area:heading;align-items:flex-start;flex-direction:column;justify-content:center;gap:18px}
+body[data-theme="premium"] .app-content>.month-hero .month-balance{width:100%;text-align:left}
+body[data-theme="premium"] .app-content>.month-hero .month-balance strong{font-size:clamp(34px,4.4vw,52px)}
+body[data-theme="premium"] .app-content>.month-hero .month-chart{grid-area:chart;min-height:145px;align-self:center}
+body[data-theme="premium"] .app-content>.month-hero .chart-summary{grid-area:summary;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0}
+body[data-theme="premium"] .app-content>.month-hero .chart-summary>div{padding:16px 18px;border:1px solid #304568;border-radius:14px;background:linear-gradient(145deg,#1b2c49aa,#0d192dcc)}
+body[data-theme="premium"] .app-content>.month-hero>.chart-footnote{grid-area:foot}
+body[data-theme="premium"] .app-content>.stats{gap:14px}
+body[data-theme="premium"] .app-content>.stats .stat{padding:22px;min-height:126px}
+body[data-theme="premium"] .app-content>.panel:not(.month-hero){box-shadow:0 18px 44px #03081744,inset 0 1px #ffffff08}
+body[data-theme="premium"] .app-sidebar{border-right:1px solid #293c60;background:linear-gradient(180deg,#101a2c,#0a1020)}
+body[data-theme="premium"] .app-sidebar .tabs{background:transparent;border:0}
+body[data-theme="premium"] .app-sidebar .tab{justify-content:flex-start;padding:13px 15px;border-radius:12px}
+body[data-theme="light"] .app-content{gap:16px}
+body[data-theme="light"] .app-content>.month-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"heading summary" "chart chart" "foot foot";gap:18px 26px;padding:26px}
+body[data-theme="light"] .app-content>.month-hero .month-heading{grid-area:heading}
+body[data-theme="light"] .app-content>.month-hero .chart-summary{grid-area:summary;align-self:center;grid-template-columns:1fr;gap:8px;margin:0}
+body[data-theme="light"] .app-content>.month-hero .chart-summary>div{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #d5e8e6;border-radius:10px;background:#f6fbfa;padding:10px 13px}
+body[data-theme="light"] .app-content>.month-hero .chart-summary strong{order:2;font-size:18px}
+body[data-theme="light"] .app-content>.month-hero .chart-summary span{order:1}
+body[data-theme="light"] .app-content>.month-hero .month-chart{grid-area:chart;min-height:125px}
+body[data-theme="light"] .app-content>.month-hero>.chart-footnote{grid-area:foot}
+body[data-theme="light"] .app-content>.stats{gap:12px}
+body[data-theme="light"] .app-content>.stats .stat{border-radius:12px;box-shadow:0 5px 16px #1b4a5108}
+body[data-theme="light"] .app-sidebar{background:#fff;border-right:1px solid #d7e5e8}
+body[data-theme="light"] .app-sidebar .tabs{background:transparent;border:0;box-shadow:none}
+body[data-theme="light"] .app-sidebar .tab{justify-content:flex-start;padding:12px 14px;border-radius:10px}
+@media(max-width:850px){
+ body[data-theme="pro"] .app-content>.month-hero,body[data-theme="premium"] .app-content>.month-hero,body[data-theme="light"] .app-content>.month-hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"heading" "summary" "chart" "foot"}
+ body[data-theme="pro"] .app-content>.month-hero .month-heading,body[data-theme="premium"] .app-content>.month-hero .month-heading{gap:12px}
+ body[data-theme="pro"] .app-content>.month-hero .chart-summary{grid-template-columns:repeat(3,minmax(0,1fr))}
+ body[data-theme="light"] .app-content>.month-hero .chart-summary{grid-template-columns:repeat(3,minmax(0,1fr))}
+ body[data-theme="light"] .app-content>.month-hero .chart-summary>div{display:block;padding:10px}
+ body[data-theme="light"] .app-content>.month-hero .chart-summary strong{display:block}
+}
+@media(max-width:600px){
+ body[data-theme="pro"] .app-content>.month-hero,body[data-theme="premium"] .app-content>.month-hero,body[data-theme="light"] .app-content>.month-hero{padding:16px}
+ body[data-theme="pro"] .app-content>.month-hero .chart-summary,body[data-theme="light"] .app-content>.month-hero .chart-summary{gap:5px}
+ body[data-theme="pro"] .app-content>.month-hero .chart-summary>div{padding:5px}
+ body[data-theme="premium"] .app-content>.month-hero .chart-summary>div{padding:10px 8px}
+ body[data-theme="light"] .app-content>.month-hero .chart-summary>div{padding:8px 6px}
+ body[data-theme="light"] .app-content>.month-hero .chart-summary span{font-size:10px}
+}
+
 </style></head><body><main class="shell">
 <section id="setup" class="panel auth hidden"><h1>Підключення Trading Journal</h1><p class="muted">Встав URL і публічний ключ Supabase. Не використовуй service_role або secret key.</p><label>Supabase Project URL</label><input id="sbUrl" placeholder="https://xxxx.supabase.co"><br><br><label>Publishable / anon key</label><input id="sbKey" placeholder="sb_publishable_… або eyJ…"><div class="actions"><button id="saveConfig">Підключити</button></div></section>
 <section id="auth" class="panel auth"><div class="brand"><div class="logo"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 25V7M12 25V15M19 25V11M26 25V4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".75"/><path d="M4 20L11 15L17 18L27 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7H27V13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h1>Trading Journal</h1><div class="muted">Твій приватний щоденник трейдера</div></div></div><p class="muted">Створи акаунт або увійди. На інших пристроях використовуй той самий email.</p><label>Email</label><input id="email" type="email" autocomplete="email"><br><br><label>Пароль</label><input id="password" type="password" autocomplete="current-password"><div class="actions"><button id="signIn">Увійти</button><button class="secondary" id="signUp">Створити акаунт</button><button class="secondary" id="changeConfig">Налаштування</button></div><p id="authMsg" class="muted"></p></section>
