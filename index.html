@@ -286,7 +286,7 @@ let authSubscription=null;let bootingUserId=null;function connect(){const c=conf
 $('saveConfig').onclick=()=>{localStorage.setItem('tj_url',$('sbUrl').value.trim());localStorage.setItem('tj_key',$('sbKey').value.trim());connect()};
 $('changeConfig').onclick=()=>{const c=config();$('sbUrl').value=c.url||'';$('sbKey').value=c.key||'';show('setup')};
 $('signUp').onclick=async()=>{const {error}=await sb.auth.signUp({email:$('email').value,password:$('password').value});$('authMsg').textContent=error?error.message:'Перевір email для підтвердження, якщо воно ввімкнене.'};
-$('signIn').onclick=async()=>{const {error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('password').value});$('authMsg').textContent=error?error.message:'Вхід успішний.'};
+$('signIn').onclick=async()=>{const btn=$('signIn'),status=$('authMsg');btn.disabled=true;status.textContent='Входимо…';try{if(!sb)throw new Error('Зʼєднання з авторизацією не готове. Онови сторінку й спробуй ще раз.');const {data,error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)throw error;if(!data.session)status.textContent='Запит прийнято, очікуємо підтвердження входу…';else status.textContent='Вхід успішний. Завантажую журнал…'}catch(e){console.error('Sign-in failed',e);status.textContent='Помилка входу: '+(e?.message||'невідома помилка')}finally{btn.disabled=false}};
 $('signOut').onclick=()=>sb.auth.signOut();
 function msg(t){$('syncState').textContent=t}
 async function boot(u){user=u;show('app');msg('Синхронізація…');await Promise.all([loadTrades(),loadPlan()]);msg('Синхронізовано')}
