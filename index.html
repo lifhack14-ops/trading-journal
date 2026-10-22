@@ -256,7 +256,7 @@ body[data-concept="universe"] .tabs{border-radius:18px}
 <div><label>⏱️ Таймфрейм</label><select id="timeframe"><option>M5</option><option>M15</option><option>M30</option><option>H1</option></select></div>
 <div><label>🧭 Напрямок</label><select id="direction"><option>Long</option><option>Short</option></select></div>
 <div><label>🕒 Дата й час входу</label><input id="entryAt" type="datetime-local" required></div>
-<div><label>💵 Ціна входу</label><input id="entryPrice" type="number" step="any" required placeholder="Напр. 2350.50"></div>
+
 <div class="wide"><label>🏁 Результат угоди</label><div class="result-grid">
 <label class="result-option"><input type="radio" name="result" value="tp1" checked> 🎯 TP1</label>
 <label class="result-option"><input type="radio" name="result" value="tp2"> 🚀 TP2</label>
@@ -318,7 +318,7 @@ const gs=k=>{const m={};closed.forEach(t=>{const n=t[k]||'—';if(!m[n])m[n]={n:
 const p=gs('instrument')[0],d=gs('direction')[0];$('bestPair').textContent=p?.name||'—';$('bestPairWin').textContent=p?p.rate+'% win rate · '+p.n+' угоди':'Потрібно 2+ угоди на пару';$('bestDirection').textContent=d?(d.name==='Long'?'🟢 Long':'🔴 Short'):'—';$('bestDirectionWin').textContent=d?d.rate+'% win rate · '+d.n+' угоди':'Потрібно 2+ угоди на напрямок';$('insightNote').textContent=closed.length?'На основі '+closed.length+' закритих угод. Це історична статистика, не гарантія майбутнього результату.':'Додай закриті угоди — тут з’явиться статистика.';
 $('trades').innerHTML=trades.length?trades.map(t=>'<article class="trade"><div class="row"><strong>'+esc(t.instrument)+' · '+esc(t.direction==='Long'?'🟢 Long':'🔴 Short')+'</strong><span class="pill">'+resultLabel(t)+'</span></div><p class="muted">'+new Date(t.entry_at).toLocaleString()+' · '+esc(t.timeframe||'—')+'</p><div><strong>Entry: '+esc(t.entry_price??'—')+'</strong></div>'+(t.setup_notes||t.emotion_notes||t.lesson_notes?'<p>'+esc([t.setup_notes,t.emotion_notes,t.lesson_notes].filter(Boolean).join(' · '))+'</p>':'')+(t.screenshot_path?'<button class="secondary" onclick="viewShot(\''+t.id+'\')">📸 Відкрити скриншот</button> ':'')+'<div class="actions"><button class="secondary" onclick="editTrade(\''+t.id+'\')">✏️ Редагувати</button><button class="danger" onclick="deleteTrade(\''+t.id+'\')">🗑️ Видалити</button></div></article>').join(''):'<div class="empty">📓 Поки немає угод.<br>Додай першу, щоб почати вести статистику.</div>'; $('reviewTrade').innerHTML=trades.map(t=>'<option value="'+t.id+'">'+esc(t.instrument)+' · '+new Date(t.entry_at).toLocaleDateString()+' · '+esc(t.direction)+'</option>').join('')}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-const fields={instrument:'instrument',direction:'direction',entryAt:'entry_at',timeframe:'timeframe',entryPrice:'entry_price',tradeNotes:'setup_notes'};
+const fields={instrument:'instrument',direction:'direction',entryAt:'entry_at',timeframe:'timeframe',tradeNotes:'setup_notes'};
 function selectedResult(){return document.querySelector('input[name="result"]:checked')?.value||'tp1'}
 function setSelectedResult(v){const el=document.querySelector('input[name="result"][value="'+v+'"]');if(el)el.checked=true;else document.querySelector('input[name="result"][value="tp1"]').checked=true}
 function resetForm(){editing=null;$('tradeForm').reset();$('formTitle').textContent='✨ Нова угода';$('entryAt').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);setSelectedResult('tp1');$('tradeMsg').textContent=''}
